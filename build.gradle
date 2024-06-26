@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    maven()
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'Scanner.ScannerInit'
+    }
+}
+
+dependencies {
+    implementation 'org.jpos:jpos:2.1.8'
+}

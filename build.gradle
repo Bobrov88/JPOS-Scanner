@@ -3,13 +3,18 @@ plugins {
 }
 
 repositories {
-    maven()
+    mavenCentral()
 }
 
 jar {
     manifest {
-        attributes 'Main-Class': 'Scanner.ScannerInit'
+        attributes 'Main-Class': 'src.main.java.Scanner.ScannerInit'
     }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 dependencies {

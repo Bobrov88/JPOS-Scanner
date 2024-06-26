@@ -1,11 +1,12 @@
 package Scanner;
 
 import java.lang.System;
-import jpos.*;
-import jpos.util.JposPropertiesConst;
 
 public class ScannerInit {
-    public static void Main() {
+    public static void Main() throws InterruptedException {
+
         System.out.println("Message");
+        Thread.sleep(5000);
+
     }
 }

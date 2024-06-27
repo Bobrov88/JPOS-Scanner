@@ -1,22 +1,18 @@
-plugins {
-    id 'java'
-}
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'Scanner.ScannerInit'
 
 repositories {
     mavenCentral()
 }
 
-jar {
-    manifest {
-        attributes 'Main-Class': 'src.main.java.Scanner.ScannerInit'
-    }
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
 dependencies {
     implementation 'org.jpos:jpos:2.1.8'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'Scanner.ScannerInit'
+    }
 }

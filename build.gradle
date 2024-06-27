@@ -1,14 +1,27 @@
+import java.time.LocalDate
+
 apply plugin: 'java'
 apply plugin: 'application'
+apply from: 'script.gradle'
 
+group = 'Scanner'
+version = '1.0'
 mainClassName = 'Scanner.ScannerInit'
 
 repositories {
     mavenCentral()
 }
 
+ext {
+    javaVersion = 17
+    currentDate = LocalDate.now()
+    println("${currentDate}")
+}
+
 dependencies {
-    implementation 'org.jpos:jpos:2.1.8'
+    implementation ('org.jpos:jpos:2.1.8') {
+       // exclude(group: '', module: '')
+    }
 }
 
 jar {

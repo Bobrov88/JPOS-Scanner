@@ -1,0 +1,17 @@
+task JPOSDriver {
+    description = "JPOS Driver for Scanner NEO FOX SD"
+    group = "Driver"
+
+    println "confirugation.phase"
+    println "Gradle=${gradle.hashCode()}, project=${project.hashCode()}, rootProject=${rootProject.hashCode()}, actions=${actions.size()}"
+
+    doLast {
+        println "doLast"
+    }
+
+    doFirst {
+        println "dofirst"
+    }
+
+    println "Gradle=${gradle.hashCode()}, project=${project.hashCode()}, rootProject=${rootProject.hashCode()}, actions=${actions.size()}"
+}

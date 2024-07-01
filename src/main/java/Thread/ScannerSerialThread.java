@@ -14,6 +14,8 @@ public class ScannerSerialThread implements Runnable{
     private Thread readThread;
     private boolean busy;
     private final WaitNotBusyHelper notBusyWaiter = new WaitNotBusyHelper();
+
+    private final WaitDataHelper dataWaiter = new WaitDataHelper();
     private ScannerSerialThread() {};
 
     public ScannerSerialThread(String commName) throws PortInUseException, UnsupportedCommOperationException {
@@ -36,5 +38,11 @@ public class ScannerSerialThread implements Runnable{
     @Override
     public void run() {
 
+    }
+    public WaitNotBusyHelper getNotBusyWaiter() {
+        return this.notBusyWaiter;
+    }
+    public WaitDataHelper getDataWaiter() {
+        return this.dataWaiter;
     }
 }

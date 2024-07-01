@@ -16,6 +16,8 @@ public class ScannerService implements ScannerService114 {
     private EventCallbacks callBack;
     private ScannerSerialThread internalThread = null;
 
+    private boolean claimed = false;
+
     public void setCommPortNumber(int pCommPortNumber) throws JposException {
         // save the port number
         this.commPortNumber = pCommPortNumber;

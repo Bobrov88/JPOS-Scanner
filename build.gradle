@@ -6,10 +6,13 @@ apply from: 'script.gradle'
 
 group = 'Scanner'
 version = '1.0'
-mainClassName = 'Scanner.ScannerInit'
+mainClassName = 'Scanner.ScannerInstanceFactory'
 
 repositories {
     mavenCentral()
+    maven { url 'https://jpos.org/maven' }
+    maven { url 'https://download.oracle.com/maven' }
+    mavenLocal()
 }
 
 ext {
@@ -19,13 +22,11 @@ ext {
 }
 
 dependencies {
-    implementation ('org.jpos:jpos:2.1.8') {
-       // exclude(group: '', module: '')
-    }
+    implementation files('libs/jpos1141.jar')
 }
 
 jar {
     manifest {
-        attributes 'Main-Class': 'Scanner.ScannerInit'
+        attributes 'Main-Class': 'Scanner.ScannerInstanceFactory'
     }
 }

@@ -7,9 +7,14 @@ import jpos.events.ErrorEvent;
 import jpos.services.EventCallbacks;
 import jpos.services.ScannerService114;
 
+import Thread.ScannerSerialThread;
+
 public class ScannerService implements ScannerService114 {
 
     private int commPortNumber;
+    private int state = JposConst.JPOS_S_CLOSED;
+    private EventCallbacks callBack;
+    private ScannerSerialThread internalThread = null;
 
     public void setCommPortNumber(int pCommPortNumber) throws JposException {
         // save the port number
@@ -204,8 +209,32 @@ public class ScannerService implements ScannerService114 {
     }
 
     @Override
-    public void claim(int i) throws JposException {
-
+    public void claim(int timeout) throws JposException {
+        try {
+            // Create the internal thread
+            this.internalThread = new ScannerSerialThread("COM" + this.commPortNumber);
+            System.out.println(1);
+            // Wait the thread is not busy
+            waitThreadNotBusy();
+            System.out.println(2);
+            // Command the physical device to cancel insert operation
+            byte[] data = { IngenicoFunction.INGENICO_CANCEL_INSERT_CHECK };
+            this.internalThread.sendSimpleOrderMessage(data);
+            System.out.println(3);
+            waitThreadNotBusy();
+            System.out.println(4);
+            // Command the physical device to eject check if their are one in
+            byte[] data2 = { IngenicoFunction.INGENICO_EJECT_CHECK };
+            this.internalThread.sendSimpleOrderMessage(data2);
+            System.out.println(5);
+            // Wait that the communication thread is not busy
+            waitThreadNotBusy();
+            System.out.println(6);
+            this.claimed = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new JposException(JposConst.JPOS_E_NOTCLAIMED, "Error in device preparation", e);
+        }
     }
 
     @Override
@@ -224,12 +253,22 @@ public class ScannerService implements ScannerService114 {
     }
 
     @Override
-    public void open(String s, EventCallbacks eventCallbacks) throws JposException {
-
+    public void open(String logicalName, EventCallbacks eventCallbacks) throws JposException {
+        this.state = JposConst.JPOS_S_IDLE;
+        this.callBack = eventCallbacks;
     }
 
     @Override
     public void release() throws JposException {
 
+    }
+
+    private boolean waitThreadNotBusy() throws JposException {
+        try {
+            internalThread.getNotBusyWaiter().waitNotBusy();
+        } catch (InterruptedException e) {
+            throw new JposException(JposConst.JPOS_E_FAILURE, "The waiting service has been interrupted");
+        }
+        return internalThread.getNotBusyWaiter().isNotified();
     }
 }

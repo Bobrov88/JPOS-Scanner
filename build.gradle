@@ -23,6 +23,7 @@ ext {
 
 dependencies {
     implementation files('libs/jpos1141.jar')
+    implementation 'org.rxtx:rxtx:2.1.7'
 }
 
 jar {

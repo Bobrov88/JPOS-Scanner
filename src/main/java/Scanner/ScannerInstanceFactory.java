@@ -6,9 +6,14 @@ import jpos.config.JposEntry;
 import jpos.config.JposEntry.Prop;
 import jpos.loader.JposServiceInstance;
 import jpos.loader.JposServiceInstanceFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class ScannerInstanceFactory implements JposServiceInstanceFactory {
     public JposServiceInstance createInstance(String paramString, JposEntry paramJposEntry) throws JposException {
+
+        final Logger logger = LogManager.getLogger();
+
         if (!(paramJposEntry.hasPropertyWithName("serviceClass")))
             throw new JposException(JposConst.JPOS_E_NOSERVICE,
                     "The JposEntry does not contain the 'serviceClass' property");

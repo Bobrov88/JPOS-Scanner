@@ -8,6 +8,7 @@ import jpos.services.EventCallbacks;
 import jpos.services.ScannerService114;
 
 import Thread.ScannerSerialThread;
+import Bytes.SendBytes;
 
 public class ScannerService implements ScannerService114 {
 
@@ -220,18 +221,18 @@ public class ScannerService implements ScannerService114 {
             waitThreadNotBusy();
             System.out.println(2);
             // Command the physical device to cancel insert operation
-            byte[] data = { IngenicoFunction.INGENICO_CANCEL_INSERT_CHECK };
-            this.internalThread.sendSimpleOrderMessage(data);
+            this.internalThread.sendSimpleOrderMessage(SendBytes.GET_DEVICE_INFO);
             System.out.println(3);
             waitThreadNotBusy();
-            System.out.println(4);
+           // System.out.println(4);
             // Command the physical device to eject check if their are one in
-            byte[] data2 = { IngenicoFunction.INGENICO_EJECT_CHECK };
-            this.internalThread.sendSimpleOrderMessage(data2);
-            System.out.println(5);
+            //byte[] data2 = { IngenicoFunction.INGENICO_EJECT_CHECK };
+            //this.internalThread.sendSimpleOrderMessage(data2);
+            //System.out.println(5);
             // Wait that the communication thread is not busy
-            waitThreadNotBusy();
-            System.out.println(6);
+            //waitThreadNotBusy();
+            //System.out.println(6);
+            System.out.println(4);
             this.claimed = true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -262,7 +263,14 @@ public class ScannerService implements ScannerService114 {
 
     @Override
     public void release() throws JposException {
+        if (this.claimed == false) {
+            return;
+        }
 
+        this.internalThread.abort();
+
+        this.claimed = false;
+        this.state = JposConst.JPOS_S_IDLE;
     }
 
     private boolean waitThreadNotBusy() throws JposException {

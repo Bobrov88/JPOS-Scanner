@@ -9,9 +9,11 @@ import jpos.services.ScannerService114;
 
 import Thread.ScannerSerialThread;
 import Bytes.SendBytes;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ScannerService implements ScannerService114 {
-
+    private static final Logger logger = LogManager.getLogger(ScannerService.class.getName());
     private int commPortNumber;
     private int state = JposConst.JPOS_S_CLOSED;
     private EventCallbacks callBack;
@@ -21,8 +23,10 @@ public class ScannerService implements ScannerService114 {
 
     public void setCommPortNumber(int pCommPortNumber) throws JposException {
         // save the port number
+        logger.info("Setting com port to " + pCommPortNumber);
         this.commPortNumber = pCommPortNumber;
         if (!(pCommPortNumber > 0 && pCommPortNumber < 255)) {
+            logger.fatal("Port number < 1 or > 255. Connection refused!");
             throw new JposException(JposConst.JPOS_E_FAILURE, "Invalid comm port number");
         }
     }
@@ -221,6 +225,7 @@ public class ScannerService implements ScannerService114 {
             waitThreadNotBusy();
             System.out.println(2);
             // Command the physical device to cancel insert operation
+            logger.debug("Claiming... That's sending 'ReadDeviceInfo.' command");
             this.internalThread.sendSimpleOrderMessage(SendBytes.GET_DEVICE_INFO);
             System.out.println(3);
             waitThreadNotBusy();
@@ -235,7 +240,7 @@ public class ScannerService implements ScannerService114 {
             System.out.println(4);
             this.claimed = true;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.fatal("Claim: " + e.getMessage());
             throw new JposException(JposConst.JPOS_E_NOTCLAIMED, "Error in device preparation", e);
         }
     }
@@ -257,26 +262,28 @@ public class ScannerService implements ScannerService114 {
 
     @Override
     public void open(String logicalName, EventCallbacks eventCallbacks) throws JposException {
+        logger.debug("Opening with logical name: " + logicalName);
         this.state = JposConst.JPOS_S_IDLE;
         this.callBack = eventCallbacks;
     }
 
     @Override
     public void release() throws JposException {
+        logger.debug("Release");
         if (this.claimed == false) {
             return;
         }
-
         this.internalThread.abort();
-
         this.claimed = false;
         this.state = JposConst.JPOS_S_IDLE;
     }
 
     private boolean waitThreadNotBusy() throws JposException {
+        logger.debug("WaitThreadNotBusy");
         try {
             internalThread.getNotBusyWaiter().waitNotBusy();
         } catch (InterruptedException e) {
+            logger.fatal("WaitThreadNotBusy: "  + e.getMessage());
             throw new JposException(JposConst.JPOS_E_FAILURE, "The waiting service has been interrupted");
         }
         return internalThread.getNotBusyWaiter().isNotified();

@@ -16,6 +16,7 @@ public final class ScannerInstanceFactory implements JposServiceInstanceFactory 
     private Logger logger = MyLogger.createLoggerInstance(ScannerInstanceFactory.class.getName());
 
     public ScannerInstanceFactory() {
+        logger.info("ScannerInstanceFactory constructor called");
     }
 
     public JposServiceInstance createInstance(String paramString, JposEntry paramJposEntry) throws JposException {

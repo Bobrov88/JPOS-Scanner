@@ -7,8 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane fx:id="MainWindowID" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="452.0" prefWidth="531.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="MainWindowID" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="452.0" prefWidth="531.0" style="-fx-background-color: #CCCCCC;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jpos.test.jpostest.MainWindowController">
    <children>
       <Button fx:id="OpenID" layoutX="405.0" layoutY="27.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Open">
          <font>
@@ -31,7 +30,7 @@
             <Font size="16.0" />
          </font>
       </Button>
-      <TextField fx:id="ScannedDataTextAreaID" layoutX="233.0" layoutY="176.0" prefHeight="103.0" prefWidth="261.0" />
+      <TextField fx:id="ScannedDataTextAreaID" alignment="TOP_LEFT" layoutX="233.0" layoutY="176.0" prefHeight="103.0" prefWidth="261.0" />
       <Label fx:id="ScannedDataID" layoutX="54.0" layoutY="176.0" prefHeight="32.0" prefWidth="150.0" text="Scanned data">
          <font>
             <Font size="22.0" />
